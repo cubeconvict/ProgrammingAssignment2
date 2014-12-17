@@ -9,18 +9,53 @@
 ## This version created 2014-12 by https://github.com/cubeconvict
 
 
-# makeCacheMatrix: This function creates a special "matrix" object that can cache its inverse.
+# makeCacheMatrix: This function creates a special "matrix" object
+# that can cache its inverse.
 
 makeCacheMatrix <- function(x = matrix()) {
-
+     m <- NULL
+     set <- function(y) {
+          x <<- y
+          m <<- NULL
+     }
+     get <- function() x
+     setinverse <- function(solve) m <<- solve
+     getinverse <- function() m
+     list(set = set, get = get,
+          setinverse = setinverse,
+          getinverse = getinverse)
 }
 
 
-## cacheSolve: This function computes the inverse of the special "matrix" returned by makeCacheMatrix above. If the inverse has already been calculated (and the matrix has not changed), then the cachesolve should retrieve the inverse from the cache.
+## cacheSolve: This function computes the inverse of the special
+##"matrix" returned by makeCacheMatrix above. If the inverse has
+##already been calculated (and the matrix has not changed), then
+## the cachesolve should retrieve the inverse from the cache.
 # Computing the inverse of a square matrix can be done with the solve function in R. For example, if X is a square invertible matrix, then solve(X) returns its inverse.
 
 
 cacheSolve <- function(x, ...) {
         ## Return a matrix that is the inverse of 'x'
+     returned.list <- makeCacheMatrix(x)
+     print(returned.list)
+     # test if the inverse has already been cached
+     # if there is no cached version, calculate one
+     if (NULL == NULL) {
+          print("Boo!")
 
+     }
+     # assume that a cached version exists and return it
+     else {
+          return(returned.list$getinverse)
+     }
+
+}
+
+unittest <- function() {
+     bigMatrix <- makeCacheMatrix(1:1000)
+     # now we have an object 'bigVec' of type list
+     biggerMatrix <- makeCacheMatrix(1:100000)
+     # 'biggerVec' of type list with 100,000 numbers
+     cacheSolve(bigMatrix)
+     cacheSolve(biggerMatrix)
 }
